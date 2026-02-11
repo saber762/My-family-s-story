@@ -1,0 +1,62 @@
+body {
+  background: #f5f2e7;
+  font-family: 'Amiri', serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  direction: rtl;
+}
+
+.book {
+  perspective: 2000px;
+  width: 900px;
+  height: 600px;
+  position: relative;
+}
+
+.page {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+  transform-origin: left;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+
+.page:nth-child(even) {
+  transform-origin: right;
+}
+
+.page-content {
+  background: #fffbe6;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+
+.page.flipped {
+  transform: rotateY(-180deg);
+}
+
+.page:nth-child(even).flipped {
+  transform: rotateY(180deg);
+}
+
+h2 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+p {
+  text-align: justify;
+  line-height: 1.8;
+  font-size: 20px;
+  }
