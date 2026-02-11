@@ -6,7 +6,6 @@
     <title>قصة عائلتي - كتاب تفاعلي</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
     <style>
-        /* --- التنسيق الجمالي (CSS) --- */
         body {
             background: #f5f2e7;
             font-family: 'Amiri', serif;
@@ -24,15 +23,14 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            height: 100%;
+            padding: 20px;
         }
 
         .book {
-            width: 400px;
-            height: 600px;
+            width: 450px;
+            height: 650px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.5s;
         }
 
         .page {
@@ -47,27 +45,24 @@
             cursor: pointer;
         }
 
-        /* حل مشكلة النص المقلوب: تقسيم الصفحة لوجه وظهر */
         .front, .back {
             width: 100%;
             height: 100%;
             position: absolute;
             top: 0;
             left: 0;
-            backface-visibility: hidden; /* يمنع رؤية المحتوى من الخلف بشكل مقلوب */
+            backface-visibility: hidden;
             background: #fffbe6;
             border: 1px solid #d4d4d4;
             box-shadow: inset 3px 0px 20px rgba(0,0,0,0.1);
-            padding: 40px;
+            padding: 35px;
             box-sizing: border-box;
             overflow-y: auto;
-            border-radius: 0 5px 5px 0;
         }
 
         .back {
-            transform: rotateY(180deg); /* تدوير الظهر ليكون صحيحاً عند التقليب */
+            transform: rotateY(180deg);
             background: #fdfaf0;
-            border-radius: 5px 0 0 5px;
             box-shadow: inset -3px 0px 20px rgba(0,0,0,0.1);
         }
 
@@ -75,26 +70,22 @@
             transform: rotateY(-180deg);
         }
 
-        /* العناوين والنصوص */
-        h2 { color: #5d4037; font-size: 24px; text-align: center; margin-top: 0; }
-        p { line-height: 1.8; font-size: 19px; text-align: justify; color: #333; }
+        h2 { color: #5d4037; font-size: 22px; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #d4d4d4; padding-bottom: 10px; }
+        p { line-height: 1.8; font-size: 18px; text-align: justify; color: #333; white-space: pre-wrap; margin: 0; }
         
-        .hint {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            color: #999;
-        }
+        .cover-title { text-align: center; margin-top: 150px; }
+        .cover-title h1 { font-size: 45px; color: #5d4037; margin-bottom: 10px; }
+        .cover-title p { text-align: center; font-size: 22px; }
+
+        .hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 14px; color: #999; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { bottom: 20px; } 50% { bottom: 30px; } }
 
         /* ترتيب الطبقات */
-        .page:nth-child(1) { z-index: 6; }
-        .page:nth-child(2) { z-index: 5; }
-        .page:nth-child(3) { z-index: 4; }
-        .page:nth-child(4) { z-index: 3; }
-        .page:nth-child(5) { z-index: 2; }
-        .page:nth-child(6) { z-index: 1; }
+        .page:nth-child(1) { z-index: 5; }
+        .page:nth-child(2) { z-index: 4; }
+        .page:nth-child(3) { z-index: 3; }
+        .page:nth-child(4) { z-index: 2; }
+        .page:nth-child(5) { z-index: 1; }
 
     </style>
 </head>
@@ -105,19 +96,95 @@
 
         <div class="page" onclick="togglePage(this)">
             <div class="front">
-                <h2>قصة عائلتي</h2>
-                <p style="text-align: center; margin-top: 50px;">
-                    ذكريات ومواقف<br>عائلة هشام<br><br>
-                    <b>(إضغط للفتح)</b>
-                </p>
-                <div class="hint">⬅ اسحب لليسار</div>
+                <div class="cover-title">
+                    <h1>قصة عائلتي</h1>
+                    <p>ذكريات ومواقف<br>عائلة هشام</p>
+                    <p style="margin-top: 50px; font-weight: bold;">(إضغط للفتح)</p>
+                </div>
+                <div class="hint">⬅ اسحب لليسار للتقليب</div>
             </div>
             <div class="back">
-                <h2>الفصل الأول: البداية</h2>
-                <p>وُلد أبونا في مدينة آسفي، المدينة التي تعانق البحر ويعانقها الملح والريح. كان صبيًا جيدًا في دراسته، مجتهدًا، يحمل في عينيه حلمًا أكبر من عمره.</p>
+                <h2>الفصل الأول: من أسفي… حيث بدأت الحكاية</h2>
+                <p>نحن أبناء هشام نصف… نروي اليوم قصة رجل لم يكن يبحث عن المجد، لكنه صنعه بصمت.
+
+وُلد أبونا في مدينة آسفي، المدينة التي تعانق البحر ويعانقها الملح والريح. كان صبيًا جيدًا في دراسته، مجتهدًا، يحمل في عينيه حلمًا أكبر من عمره. لكن ليست كل الأحلام يُسمح لها أن تكمل طريقها…
+
+لم تشأ الأقدار أن يُكمل تعليمه. ففي سن الخامسة عشرة، حين كان غيره ما يزال يلهو، كان هو قد بدأ يتحمّل ما لا يتحمله إلا الرجال.</p>
             </div>
         </div>
 
         <div class="page" onclick="togglePage(this)">
             <div class="front">
-                <h2>البحر والمسؤولية</h2>
+                <p>كان أكبر إخوته، وكان قلبه يخاف عليهم أكثر مما يخاف على نفسه. حمل المسؤولية مبكرًا… لا لأن أحدًا أجبره، بل لأن داخله كان يقول له: "أنت السند."
+
+خرج إلى البحر… إلى المجهول… إلى أيامٍ لا يُرى فيها اليابسة. كان يبحر مع البحارة في عمق المحيط، أيامًا متواصلة، بين الأمواج والبرد والتعب والملح. وفي كل مرة يعود، لم يكن يعود فقط بجسد متعب… بل كان يعود بعزة رجل يصنع الحياة بيديه. اشتغل في كل شيء. قاد الحافلات… قاد الشاحنات… عمل في مدن كثيرة: العيون، بوجدور، طنطان… شمالًا وجنوبًا. لكن رغم كل ذلك… كان البحر حبه الأول.</p>
+            </div>
+            <div class="back">
+                <h2>الفصل الثاني: بداية أسرة… وبداية وطن</h2>
+                <p>في مرحلة من عمره، اختار أبونا شريكة حياته. امرأة قوية… صامدة… صبورة… امرأة فقدت الكثير لتمنحنا نحن كل شيء. لم تعد تهتم بلباسها كما كانت، ولا بصديقاتها، ولا بوقتها… لأن وقتها أصبح نحن.
+
+كانت مدرسة في عملها، ومدرسة في بيتها، ومدرسة في قلوبنا. في سنة 2000، وُلد أولنا… أيمن، سند أبي… وأخونا الكبير. ثم جاءت أختنا أمينة، زهرة البيت ووسطه الدافئ.</p>
+            </div>
+        </div>
+
+        <div class="page" onclick="togglePage(this)">
+            <div class="front">
+                <p>في إحدى تلك الأيام العصيبة… كانت والدته مريضة جدًا. وقف للحظة في غرفة المستشفى، ينظر عبر الشرفة… وجاء الخبر… والدته رحلت. صُدم… غمره الحزن، لكنه لم يستسلم.
+
+من هناك بدأ يفكر في مستقبل أسرته، حتى جاءت فكرة الرحيل من آسفي وبداية صفحة جديدة في مدينة العيون، في المرسى. هناك اقتنينا أول منزل لنا. هناك أصبح لنا عنوان… اسم… ومكان بين الناس. ثم وُلدنا نحن… صابر وصابرين. توأم الحلم المتأخر، والفرحة التي اكتمل بها البيت.</p>
+            </div>
+            <div class="back">
+                <h2>الفصل الثالث: الرجل الذي كان يغيب ليحضر مستقبلنا</h2>
+                <p>كان أبونا يسافر كثيرًا. كنا نراه أيامًا قليلة في الشهر، لكنه لم يكن يغيب عنا، بل كان يسافر من أجلنا. كان يعمل في مدن بعيدة، ليؤمّن لنا حياة كريمة، ليلبسنا أجمل الملابس، ويدخلنا أفضل المدارس.
+
+كان يتعب… حتى لا نتعب نحن. كان يحرم نفسه… حتى لا يُحرم أحد منا. لم يكن يتكلم كثيرًا عن تعبه، لكن أيديه كانت تحكي، وصمته كان أبلغ من ألف كلمة.</p>
+            </div>
+        </div>
+
+        <div class="page" onclick="togglePage(this)">
+            <div class="front">
+                <h2>الفصل الخامس: الرجل الذي خسر ليجعلنا نربح</h2>
+                <p>اليوم، عندما ننظر إلى راحتنا، نكتشف شيئًا مهمًا: لم يكن كل ذلك صدفة. كان هناك رجل يخسر بصمت ليجعلنا نربح. في الصيف، كان يسافر بنا إلى مدن عديدة، يسكننا في أجمل المنازل والفنادق، وكان هو سعيدًا حين يرى أعيننا تلمع. الحقيقة أن هناك رجلًا كان يصنع هذه “الطبيعية” بعرقه وصبره.</p>
+            </div>
+            <div class="back">
+                <h2>الفصل السادس: اليوم… الصبر والإصرار</h2>
+                <p>اليوم، رحلتنا لم تنته بعد… فأخي الآن في إسبانيا يكافح ويعمل... وأختنا تتألم بصمت بسبب مرضها، لكنها لم تضعف، بل أظهرت لنا صبراً وشجاعة. تعلمت منها أن الصبر لا يعني فقط التحمل… بل التحمل مع الحب. ندعو الله أن يمنحها الشفاء التام ويعوضها بكل خير.</p>
+            </div>
+        </div>
+
+        <div class="page" onclick="togglePage(this)">
+            <div class="front">
+                <h2>النهاية: رسالة حب وشكر</h2>
+                <p>أنتم أحسن وأفضل أولياء أمورنا، وأعظم من رسموا لنا طريق الحياة. أنتم مثال الصبر… مثال التضحية… مثال الحب الحقيقي. نحن نحبكم… يا أبي… يا أمي… ونشكركم على كل لحظة. نعدكم أن نحمل قيمكم ونكون دائمًا فخورين بأننا أبناءكم.</p>
+            </div>
+            <div class="back" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <p style="font-style: italic; font-weight: bold;">"وَٱلَّذِينَ جَاهَدُوا۟ فِينَا لَنَهْدِيَنَّهُمْ سُبُلَنَا وَإِنَّ ٱللَّهَ لَمَعَ ٱلْمُحْسِنِينَ"</p>
+                <p style="margin-top: 30px;">(سورة العنكبوت: 69)</p>
+                <h3 style="margin-top: 40px; color: #5d4037;">تمت بحب</h3>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function togglePage(page) {
+        page.classList.toggle('flipped');
+        
+        // ضبط الترتيب بعد الحركة لضمان ظهور الصفحة الصحيحة فوق الأخرى
+        if (page.classList.contains('flipped')) {
+            setTimeout(() => { page.style.zIndex = 1; }, 600);
+        } else {
+            setTimeout(() => {
+                let allPages = document.querySelectorAll('.page');
+                allPages.forEach((p, index) => {
+                    if (!p.classList.contains('flipped')) {
+                        p.style.zIndex = allPages.length - index;
+                    }
+                });
+            }, 600);
+        }
+    }
+</script>
+
+</body>
