@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Donut</title>
+  </head>
+  <body>
+		<canvas class="webgl"></canvas>
+    <div class="scanlines"></div>
+
+    <!-- Custom cursor -->
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- Nav -->
+    <nav>
+      <span class="nav-logo">DD-2026 / ARTIFACT</span>
+      <div class="nav-status">
+        <div class="dot-live"></div>
+        REALTIME · WEBGL
+      </div>
+    </nav>
+
+    <!-- Sidebar progress -->
+    <div class="sidebar">
+      <div class="sidebar-item active" data-idx="0">
+        <span class="sidebar-label">Hero</span>
+        <div class="sidebar-tick"></div>
+      </div>
+      <div class="sidebar-item" data-idx="1">
+        <span class="sidebar-label">Architecture</span>
+        <div class="sidebar-tick"></div>
+      </div>
+      <div class="sidebar-item" data-idx="2">
+        <span class="sidebar-label">Interaction</span>
+        <div class="sidebar-tick"></div>
+      </div>
+    </div>
+
+    <!-- HUD decorations -->
+    <div class="hud-corner hud-tl">
+      <svg width="40" height="40" fill="none">
+        <path d="M40 1H1v39" stroke="rgba(255,77,0,0.3)" stroke-width="1" />
+      </svg>
+    </div>
+    <div
+      class="hud-corner hud-br"
+      style="
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+      "
+    >
+      <div class="hud-readout" id="hud-readout" style="text-align: right">
+        X: +0.000<br />
+        Y: +0.000<br />
+        Z: +7.000
+      </div>
+      <svg width="40" height="40" fill="none" style="transform: rotate(180deg)">
+        <path d="M40 1H1v39" stroke="rgba(255,77,0,0.3)" stroke-width="1" />
+      </svg>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <section id="section-1">
+        <div class="hero-top">
+          <h1 class="hero-title">
+            The future<br />is <span class="accent">fracture.</span>
+          </h1>
+          <div class="hero-meta">
+            <span class="tag">Generative 3D · 2026</span>
+            <span class="desc"
+              >Procedural stone shell.<br />Wireframe core.<br />Touch to break
+              open.</span
+            >
+          </div>
+        </div>
+
+        <div class="hover-hint">↑ hover the surface to interact ↑</div>
+
+        <div class="hero-bottom">
+          <div class="hero-cta">
+            <span class="cta-label">Scroll to explore</span>
+            <div class="cta-arrow">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M8 2v12M3 9l5 5 5-5"
+                  stroke="currentColor"
+                  stroke-width="1.3"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="hero-coords" id="hero-coords">
+            φ 000.00° · θ 000.00°<br />
+            FRAGMENTS: 2500+ · CELLS: 50×50
+          </div>
+        </div>
+      </section>
+
+      <div class="rule"></div>
+
+      <section id="section-2" class="split-section">
+        <div class="empty-col"></div>
+        <div class="text-col">
+          <div class="sec-num">02 / 03</div>
+          <p class="sec-tag">// Architecture</p>
+          <h2 class="sec-h2">Two layers.<br />One truth.</h2>
+          <p class="sec-body">
+            Hundreds of independent Voronoi fragments form the stone shell —
+            each a real mesh with PBR material. Beneath it, a barycentric GLSL
+            shader traces every triangle edge in fire.
+          </p>
+          <div class="stats">
+            <div>
+              <div class="stat-n">2500+</div>
+              <div class="stat-l">Fragments</div>
+            </div>
+            <div>
+              <div class="stat-n">60fps</div>
+              <div class="stat-l">Realtime</div>
+            </div>
+            <div>
+              <div class="stat-n">0</div>
+              <div class="stat-l">Assets</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="rule"></div>
+
+      <section id="section-3" class="split-section">
+        <div class="text-col border-right">
+          <div class="sec-num">03 / 03</div>
+          <p class="sec-tag">// Interaction</p>
+          <h2 class="sec-h2">Touch it.<br />Break it open.</h2>
+          <p class="sec-body">
+            Move your cursor across the surface. Each fragment responds
+            independently — lifting away on a random hinge axis, exposing the
+            luminous wireframe within.
+          </p>
+          <ul class="feat-list">
+            <li>Voronoi decomposition · GLSL + JS</li>
+            <li>Barycentric wireframe · UnrealBloom</li>
+            <li>PBR stone · normal + roughness maps</li>
+            <li>GSAP ScrollTrigger · spring animation</li>
+          </ul>
+        </div>
+        <div class="empty-col"></div>
+      </section>
+    </div>
+    <script type="module" src="./script.js"></script>
+
+		<script type="module">
+      import gsap from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+      import Lenis from "lenis";
+
+      const lenis = new Lenis({
+        duration: 2.0,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
+
+      // Custom cursor
+      const cur = document.getElementById("cursor");
+      const ring = document.getElementById("cursor-ring");
+      let mx = 0, my = 0, rx = 0, ry = 0;
+      window.addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; });
+      (function loopCursor() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        cur.style.left = mx + "px";
+        cur.style.top = my + "px";
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+        requestAnimationFrame(loopCursor);
+      })();
+
+      // HUD readout
+      window.addEventListener("mousemove", (e) => {
+        const x = ((e.clientX / window.innerWidth) * 2 - 1).toFixed(3);
+        const y = (-(e.clientY / window.innerHeight) * 2 + 1).toFixed(3);
+        document.getElementById("hud-readout").innerHTML =
+          `X: ${x > 0 ? "+" : ""}${x}<br>Y: ${y > 0 ? "+" : ""}${y}<br>Z: +7.000`;
+        const phi = ((e.clientX / window.innerWidth) * 360).toFixed(2).padStart(6, "0");
+        const theta = ((e.clientY / window.innerHeight) * 180).toFixed(2).padStart(6, "0");
+        const coords = document.getElementById("hero-coords");
+        if (coords) coords.textContent = `φ ${phi}° · θ ${theta}°\nFRAGMENTS: 2500+ · CELLS: 50×50`;
+      });
+
+      // Entrance animations
+      gsap.to(".nav-status", { opacity: 1, duration: 1, delay: 1.5 });
+      gsap.to(".hud-corner", { opacity: 1, duration: 1, delay: 1.2, stagger: 0.2 });
+      gsap.to(".sidebar-label", { opacity: 1, x: 0, duration: 0.6, delay: 1.4, stagger: 0.1 });
+
+      gsap.timeline({ delay: 0.4 })
+        .to(".hero-title", { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" })
+        .to(".hero-meta", { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "-=0.5")
+        .to(".hero-cta", { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, "-=0.4")
+        .to(".hero-coords", { opacity: 1, duration: 0.5 }, "-=0.3")
+        .to(".hover-hint", { opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.2");
+
+      // Section reveals
+      gsap.timeline({ scrollTrigger: { trigger: "#section-2", start: "top 65%" } })
+        .to("#section-2 .sec-num", { opacity: 1, duration: 0.4 })
+        .to("#section-2 .sec-tag", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.1")
+        .to("#section-2 .sec-h2", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.2")
+        .to("#section-2 .sec-body", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3")
+        .to("#section-2 .stats", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.2");
+
+      gsap.timeline({ scrollTrigger: { trigger: "#section-3", start: "top 65%" } })
+        .to("#section-3 .sec-num", { opacity: 1, duration: 0.4 })
+        .to("#section-3 .sec-tag", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.1")
+        .to("#section-3 .sec-h2", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.2")
+        .to("#section-3 .sec-body", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3")
+        .to("#section-3 .feat-list", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.2");
+
+      // Sidebar active state
+      const items = document.querySelectorAll(".sidebar-item");
+      ["#section-1", "#section-2", "#section-3"].forEach((id, i) => {
+        ScrollTrigger.create({
+          trigger: id, start: "top center", end: "bottom center",
+          onToggle: (self) => {
+            if (self.isActive) {
+              items.forEach((it) => it.classList.remove("active"));
+              items[i].classList.add("active");
+            }
+          },
+        });
+      });
+
+      // Hide HUD when leaving hero
+      ScrollTrigger.create({
+        trigger: "#section-2",
+        start: "top 85%",
+        onEnter: () => {
+          gsap.to(".hover-hint", { opacity: 0, duration: 0.4 });
+          gsap.to(".hud-corner, #hud-readout, .hero-coords", { opacity: 0, duration: 0.4 });
+          gsap.to(".sidebar", { opacity: 0, duration: 0.4 });
+        },
+        onLeaveBack: () => {
+          gsap.to(".hover-hint", { opacity: 1, duration: 0.4 });
+          gsap.to(".hud-corner, #hud-readout, .hero-coords", { opacity: 1, duration: 0.4 });
+          gsap.to(".sidebar", { opacity: 1, duration: 0.4 });
+        },
+      });
+    </script>
+  </body>
+</html>
